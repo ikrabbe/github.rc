@@ -6,13 +6,18 @@ Copy this command to $home/bin/rc and call
 
 The command simply translates the arguments into
 
-	hget https://github.com/$repo/blob/$branch/$file|sed -ne '/<article/,/<\/article/p'|htmlfmt
+	hget https://github.com/$repo/$mode/$branch/$file
+
+. For `mode=blob` mode I use 
+
+	hget https://github.com/$repo/$mode/$branch/$file|sed -ne '/<article/,/<\/article/p'|htmlfmt
 
 where
 
 - repo = USER/REPOSITORY	# actually the first non-option argument (mandatory)
 - file = FILE				# actually the second non-option argument (default = README.md)
 - branch = -b|--branch arg	# the argument of the option `-b` or the long option `--branch` (default = master)
+- mode = --blob			# mode=blob for articles (as README.md). mode=raw is the default
 
 ## Example
 

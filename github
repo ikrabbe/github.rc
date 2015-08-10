@@ -10,6 +10,7 @@ rest=$*
 pos = ()
 repo = ''
 branch = 'master'
+mode = 'raw'
 file = 'README.md'
 while ( ! ~ $#args 0 ) {
 	k = $1
@@ -23,6 +24,9 @@ while ( ! ~ $#args 0 ) {
 		if ( ~$k '--branch' ) {
 			shift
 			branch = $1
+		}
+		if not if ( ~$k '--blob' ) {
+			mode = 'blob'
 		}
 		shift
 	}
@@ -54,8 +58,14 @@ if ( ~ $repo '' ) {
 }
 
 ramfs -p
-fullurl = 'https://github.com/'$repo'/blob/'$branch'/'$file
+fullurl = 'https://github.com/'$repo'/'$mode'/'$branch'/'$file
+# echo $fullurl
 ofile = /tmp/github.$pid
 hget -o $ofile $fullurl
-cat $ofile |sed -ne '/<article/,/<\/article/p'|htmlfmt
+if ( ~ $mode 'raw' ) {
+	cat $ofile
+}
+if not {
+	cat $ofile |sed -ne '/<article/,/<\/article/p'|htmlfmt
+}
 rm $ofile
