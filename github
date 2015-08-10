@@ -1,0 +1,61 @@
+#!/bin/rc
+
+# Call this command:
+# hget https://github.com/$1/blob/$branch/$2|sed -ne '/<article/,/<\/article/p'|htmlfmt
+# where $1 is the user/repository (mandatory), $branch might be given as --branch or -b option
+# TODO: add a cache directory argument, to locally store/update such files (options --cache, -c)
+
+args=$*
+rest=$*
+pos = ()
+repo = ''
+branch = 'master'
+file = 'README.md'
+while ( ! ~ $#args 0 ) {
+	k = $1
+	if ( ~$k '--' ) {
+		shift
+		rest = $*
+		shift $#rest
+	}
+	if not if ( ~$k '--'* ) {
+#		echo 'handle long option '$k
+		if ( ~$k '--branch' ) {
+			shift
+			branch = $1
+		}
+		shift
+	}
+	if not if ( ~$k '-'* ) {
+#		echo 'handle option '$k
+		if ( ~$k '-b' ) {
+			shift
+			branch = $1
+		}
+		shift
+	}
+	if not {
+#		echo 'pos = '$#pos
+		if ( ~ $#pos 0 ) {
+			repo = $k
+		}
+		if not if ( ~ $#pos 1 ) {
+			file = $k
+		}
+		pos=($pos '#')
+		shift
+	}
+	args = $*
+}
+
+if ( ~ $repo '' ) {
+	echo 'no repository given' >[1=2]
+	exit 'no repository'
+}
+
+ramfs -p
+fullurl = 'https://github.com/'$repo'/blob/'$branch'/'$file
+ofile = /tmp/github.$pid
+hget -o $ofile $fullurl
+cat $ofile |sed -ne '/<article/,/<\/article/p'|htmlfmt
+rm $ofile
