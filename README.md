@@ -14,10 +14,10 @@ The command simply translates the arguments into
 
 where
 
-- repo = USER/REPOSITORY	# actually the first non-option argument (mandatory)
-- file = FILE				# actually the second non-option argument (default = README.md)
-- branch = -b|--branch arg	# the argument of the option `-b` or the long option `--branch` (default = master)
-- mode = --blob			# mode=blob for articles (as README.md). mode=raw is the default
+- repo = USER/REPOSITORY	_# actually the first non-option argument (mandatory)_
+- file = FILE				_# actually the second non-option argument (default = README.md)_
+- branch = -b|--branch arg	_# the argument of the option `-b` or the long option `--branch` (default = master)_
+- mode = --blob			_# mode=blob for articles (as README.md). mode=raw is the default_
 
 ## Example
 
