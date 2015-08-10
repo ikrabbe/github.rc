@@ -14,5 +14,21 @@ where
 - file = FILE				# actually the second non-option argument (default = README.md)
 - branch = -b|--branch arg	# the argument of the option `-b` or the long option `--branch` (default = master)
 
+## Example
+
+To read the README.md of this repository you simply use
+
+	github ikrabbe/github.rc
+
+, to show the rc command itself you can use
+
+	github ikrabbe/github.rc github
+
+and finally to install the command into your $home/bin/rc you can do
+
+	github ikrabbe/github.rc github > bin/rc/github; chmod 755 bin/rc/github
+
+.
+
 Happy githubbing!
 
