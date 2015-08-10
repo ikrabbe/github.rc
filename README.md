@@ -28,7 +28,7 @@ and finally to install the command into your $home/bin/rc you can do
 
 	github ikrabbe/github.rc github > bin/rc/github; chmod 755 bin/rc/github
 
-.
+(of course you would need the github command before you can install it, in this example ;)).
 
 Happy githubbing!
 
