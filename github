@@ -11,6 +11,7 @@ pos = ()
 repo = ''
 branch = 'master'
 mode = 'raw'
+modedefault = 1
 file = 'README.md'
 while ( ! ~ $#args 0 ) {
 	k = $1
@@ -27,6 +28,11 @@ while ( ! ~ $#args 0 ) {
 		}
 		if not if ( ~$k '--blob' ) {
 			mode = 'blob'
+			modedefault = 0
+		}
+		if not if ( ~$k '--raw' ) {
+			mode = 'raw'
+			modedefault = 0
 		}
 		shift
 	}
@@ -57,15 +63,21 @@ if ( ~ $repo '' ) {
 	exit 'no repository'
 }
 
+if ( ~ $file *'.md' ) {
+	if ( ~ $modedefault 1 ) {
+		mode = 'blob'
+	}
+}
+
 ramfs -p
 fullurl = 'https://github.com/'$repo'/'$mode'/'$branch'/'$file
 # echo $fullurl
 ofile = /tmp/github.$pid
 hget -o $ofile $fullurl
-if ( ~ $mode 'raw' ) {
-	cat $ofile
+if ( ~ $mode 'blob' ) {
+	cat $ofile |sed -ne '/<article/,/<\/article/p'|htmlfmt
 }
 if not {
-	cat $ofile |sed -ne '/<article/,/<\/article/p'|htmlfmt
+	cat $ofile
 }
 rm $ofile
